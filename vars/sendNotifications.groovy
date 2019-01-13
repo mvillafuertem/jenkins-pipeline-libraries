@@ -6,7 +6,11 @@ import net.sf.json.JSONObject
 /**
  * notify slack and set message based on build status
  */
-def call(String buildStatus = 'STARTED', String channel = '#resine') {
+def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
+
+    // buildStatus of null means successfull
+    buildStatus = buildStatus ?: 'SUCCESSFUL'
+    channel = channel ?: '#jenkins'
 
     // Default values
     subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
@@ -73,7 +77,7 @@ private JSONObject createCommitMessage() {
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
     final JSONObject commitMessage = new JSONObject()
-    commitMessage.put('title', "Commit Message $commit")
+    commitMessage.put('title', "Commit Message" + commit)
     commitMessage.put('value', message.toString())
     commitMessage.put('short', false)
     commitMessage
