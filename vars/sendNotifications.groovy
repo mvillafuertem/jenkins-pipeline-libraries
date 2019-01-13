@@ -67,25 +67,13 @@ def call(String buildStatus = 'STARTED', String channel = '#resine') {
 
     JSONObject attachment = createAttachment(title, title_link, subject, colorCode)
     // JSONObject for branch
-    JSONObject branch = new JSONObject()
-    branch.put('title', 'Branch')
-    branch.put('value', branchName.toString())
-    branch.put('short', true)
+    JSONObject branch = createBranch(branchName)
     // JSONObject for author
-    JSONObject commitAuthor = new JSONObject()
-    commitAuthor.put('title', 'Author')
-    commitAuthor.put('value', author.toString())
-    commitAuthor.put('short', true)
+    JSONObject commitAuthor = createCommitAuthor(author)
     // JSONObject for branch
-    JSONObject commitMessage = new JSONObject()
-    commitMessage.put('title', 'Commit Message')
-    commitMessage.put('value', message.toString())
-    commitMessage.put('short', false)
+    JSONObject commitMessage = createCommitMessage(message)
     // JSONObject for test results
-    JSONObject testResults = new JSONObject()
-    testResults.put('title', 'Test Summary')
-    testResults.put('value', testSummary.toString())
-    testResults.put('short', false)
+    JSONObject testResults = createTestSummary(testSummary)
     attachment.put('fields', [branch, commitAuthor, commitMessage, testResults])
     JSONArray attachments = new JSONArray()
     attachments.add(attachment)
@@ -93,6 +81,38 @@ def call(String buildStatus = 'STARTED', String channel = '#resine') {
     // Send notifications
     slackSend(color: colorCode, message: subject, attachments: attachments.toString(), channel: channel)
 
+}
+
+private static JSONObject createTestSummary(GString testSummary) {
+    JSONObject testResults = new JSONObject()
+    testResults.put('title', 'Test Summary')
+    testResults.put('value', testSummary.toString())
+    testResults.put('short', false)
+    testResults
+}
+
+private static JSONObject createCommitMessage(message) {
+    JSONObject commitMessage = new JSONObject()
+    commitMessage.put('title', 'Commit Message')
+    commitMessage.put('value', message.toString())
+    commitMessage.put('short', false)
+    commitMessage
+}
+
+private static JSONObject createCommitAuthor(author) {
+    JSONObject commitAuthor = new JSONObject()
+    commitAuthor.put('title', 'Author')
+    commitAuthor.put('value', author.toString())
+    commitAuthor.put('short', true)
+    commitAuthor
+}
+
+private static JSONObject createBranch(GString branchName) {
+    JSONObject branch = new JSONObject()
+    branch.put('title', 'Branch')
+    branch.put('value', branchName.toString())
+    branch.put('short', true)
+    return branch
 }
 
 private static JSONObject createAttachment(GString title, GString title_link, GString subject, java.lang.String colorCode) {
