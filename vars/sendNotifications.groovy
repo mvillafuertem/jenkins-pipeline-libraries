@@ -83,7 +83,7 @@ private JSONObject createCommitMessage() {
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', "Commit Message")
-    commitMessage.put('value', message.toString() + "\n\n" + commitMess.toString() + commit + ">")
+    commitMessage.put('value', message.toString() + "\n\n" + commitMess.toString() + commit.toString() + ">")
     commitMessage.put('short', false)
     commitMessage
 }
