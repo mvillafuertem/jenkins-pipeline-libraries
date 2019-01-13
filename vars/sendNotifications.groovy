@@ -13,7 +13,7 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
     channel = channel ?: '#jenkins'
 
     // Default values
-    subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
+    subject = ":clap: ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
     title = "${env.JOB_NAME} Build: ${env.BUILD_NUMBER}"
     title_link = "${env.RUN_DISPLAY_URL}"
 
@@ -77,7 +77,7 @@ private JSONObject createCommitMessage() {
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
     final JSONObject commitMessage = new JSONObject()
-    commitMessage.put('title', "Commit Message" + commit)
+    commitMessage.put('title', "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} | " + commit + ">")
     commitMessage.put('value', message.toString())
     commitMessage.put('short', false)
     commitMessage
