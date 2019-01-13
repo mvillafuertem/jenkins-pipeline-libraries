@@ -6,17 +6,24 @@ import net.sf.json.JSONObject
 /**
  * notify slack and set message based on build status
  */
-def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
+def call(String buildStatus = 'STARTED', String channel = '#resine') {
 
     // buildStatus of null means successfull
     buildStatus = buildStatus ?: 'SUCCESSFUL'
-    channel = channel ?: '#jenkins'
+    channel = channel ?: '#resine'
 
 
+    // Default values
+    colorName = 'RED'
+    colorCode = '#FF0000'
     def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
+    def title = "${env.JOB_NAME} Build: ${env.BUILD_NUMBER}"
+    def title_link = "${env.RUN_DISPLAY_URL}"
     def branchName = "${env.BRANCH_NAME}"
+
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an'").trim()
+
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
     // Override default values based on build status
@@ -59,63 +66,40 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
     def testSummary = "`${testSummaryRaw}`"
     println testSummary.toString()
 
-
+    JSONObject attachment = createAttachment(title, title_link, subject, colorCode)
     // JSONObject for branch
-    JSONObject branch = createBranch(branchName)
+    JSONObject branch = new JSONObject()
+    branch.put('title', 'Branch')
+    branch.put('value', branchName.toString())
+    branch.put('short', true)
     // JSONObject for author
-    JSONObject commitAuthor = createCommitAuthor(author)
+    JSONObject commitAuthor = new JSONObject()
+    commitAuthor.put('title', 'Author')
+    commitAuthor.put('value', author.toString())
+    commitAuthor.put('short', true)
     // JSONObject for branch
-    JSONObject commitMessage = createCommitMessage(message)
+    JSONObject commitMessage = new JSONObject()
+    commitMessage.put('title', 'Commit Message')
+    commitMessage.put('value', message.toString())
+    commitMessage.put('short', false)
     // JSONObject for test results
-    JSONObject testResults = createTestSummary(testSummary)
+    JSONObject testResults = new JSONObject()
+    testResults.put('title', 'Test Summary')
+    testResults.put('value', testSummary.toString())
+    testResults.put('short', false)
     attachment.put('fields', [branch, commitAuthor, commitMessage, testResults])
-    JSONArray attachments = createAttachments()
+    JSONArray attachments = new JSONArray()
+    attachments.add(attachment)
+    println attachments.toString()
 
     // Send notifications
     slackSend(color: colorCode, message: subject, attachments: attachments.toString(), channel: channel)
 
 }
 
-private static JSONObject createBranch(groovy.lang.GString branchName) {
-    JSONObject branch = new JSONObject()
-    branch.put('title', 'Branch')
-    branch.put('value', branchName.toString())
-    branch.put('short', true)
-    branch
-}
-
-private static JSONObject createCommitAuthor(author) {
-    JSONObject commitAuthor = new JSONObject()
-    commitAuthor.put('title', 'Author')
-    commitAuthor.put('value', author.toString())
-    commitAuthor.put('short', true)
-    commitAuthor
-}
-
-private static JSONObject createCommitMessage(message) {
-    JSONObject commitMessage = new JSONObject()
-    commitMessage.put('title', 'Commit Message')
-    commitMessage.put('value', message.toString())
-    commitMessage.put('short', false)
-    commitMessage
-}
-
-private static JSONObject createTestSummary(groovy.lang.GString testSummary) {
-    JSONObject testResults = new JSONObject()
-    testResults.put('title', 'Test Summary')
-    testResults.put('value', testSummary.toString())
-    testResults.put('short', false)
-    testResults
-}
-
-private JSONArray createAttachments() {
-
-    def title = "${env.JOB_NAME} Build: ${env.BUILD_NUMBER}"
-    def title_link = "${env.RUN_DISPLAY_URL}"
-
-
+private static JSONObject createAttachment(GString title, GString title_link, GString subject, java.lang.String colorCode) {
     JSONObject attachment = new JSONObject()
-    attachment.put('author', "jenkins")
+    attachment.put('author', "resine")
     attachment.put('author_link', "https://danielschaaff.com")
     attachment.put('title', title.toString())
     attachment.put('title_link', title_link.toString())
@@ -123,9 +107,5 @@ private JSONArray createAttachments() {
     attachment.put('fallback', "fallback message")
     attachment.put('color', colorCode)
     attachment.put('mrkdwn_in', ["fields"])
-
-    JSONArray attachments = new JSONArray()
-    attachments.add(attachment)
-    println attachments.toString()
-    return attachments
+    return attachment
 }
