@@ -76,13 +76,7 @@ private JSONObject createCommitMessage() {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    subject = ":clap: ${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
-
-
-    commitMes = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  ${commit})>"
-    println(commitMes)
     commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  ${git rev-parse HEAD})>"
-    com
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', commitMess.toString())
