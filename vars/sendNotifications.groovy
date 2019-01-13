@@ -27,7 +27,7 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
         colorCode = 'danger'
     }
 
-    final JSONObject attachment = createAttachment(title, title_link, subject, colorCode)
+    final JSONObject attachment = createAttachment(title, title_link, colorCode)
     final JSONArray attachments = createAttachments(attachment)
 
     // Send notifications
@@ -73,10 +73,10 @@ private JSONObject createTestSummary() {
 }
 
 private JSONObject createCommitMessage() {
-    def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+    //def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  ${git rev-parse HEAD})>"
+    commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  changes )>"
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', commitMess.toString())
@@ -105,14 +105,14 @@ private JSONObject createBranch() {
     return branch
 }
 
-private JSONObject createAttachment(GString title, GString title_link, GString subject, java.lang.String colorCode) {
+private JSONObject createAttachment(GString title, GString title_link, java.lang.String colorCode) {
 
     final JSONObject attachment = new JSONObject()
     attachment.put('author', "mvillafuerte")
     attachment.put('author_link', "https://mvillafuerte.com")
     attachment.put('title', title.toString())
     attachment.put('title_link', title_link.toString())
-    attachment.put('text', subject.toString())
+    //attachment.put('text', subject.toString())
     attachment.put('fallback', "fallback message")
     attachment.put('color', colorCode)
     attachment.put('mrkdwn_in', ["fields"])
