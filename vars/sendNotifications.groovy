@@ -76,11 +76,11 @@ private JSONObject createCommitMessage() {
     //def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  changes )>"
+    commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  show changes )>"
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', commitMess.toString())
-    commitMessage.put('value', message.toString())
+    commitMessage.put('value', message.toString() + "\n\n" + commitMess)
     commitMessage.put('short', false)
     commitMessage
 }
