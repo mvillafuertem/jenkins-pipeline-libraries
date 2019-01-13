@@ -13,6 +13,7 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
     channel = channel ?: '#jenkins'
 
     // Default values
+    //subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
     subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
     title = "${env.JOB_NAME} Build: ${env.BUILD_NUMBER}"
     title_link = "${env.RUN_DISPLAY_URL}"
@@ -20,13 +21,13 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
     if (buildStatus == 'STARTED') {
         colorCode = '#FFFF00'
     } else if (buildStatus == 'SUCCESSFUL') {
-        subject = ":tada: ${buildStatus}: :clap: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
+        subject = ":tada: ${buildStatus}: :clap:"
         colorCode = 'good'
     } else if (buildStatus == 'UNSTABLE') {
-        subject = ":warning: ${buildStatus}: :bomb: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
+        subject = ":warning: ${buildStatus}: :bomb:)"
         colorCode = 'warning'
     } else {
-        subject = ":boom: ${buildStatus}: :fire: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
+        subject = ":boom: ${buildStatus}: :fire:"
         colorCode = 'danger'
     }
 
@@ -79,11 +80,11 @@ private JSONObject createCommitMessage() {
     //def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
-    commitMess = "Commit Message < ${env.RUN_CHANGES_DISPLAY_URL} |  show changes )>"
+    commitMess = "Commit Message <${env.RUN_CHANGES_DISPLAY_URL}|show changes>"
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', commitMess.toString())
-    commitMessage.put('value', message.toString() + "\n\n" + commitMess)
+    commitMessage.put('value', message.toString() + "\n\n" + commitMess.toString())
     commitMessage.put('short', false)
     commitMessage
 }
