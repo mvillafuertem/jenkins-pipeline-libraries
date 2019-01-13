@@ -77,9 +77,9 @@ private JSONObject createTestSummary() {
 }
 
 private JSONObject createCommitMessage() {
-    //def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+    def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-    commitMess = "<${env.RUN_CHANGES_DISPLAY_URL}|show changes>"
+    commitMess = "<${env.RUN_CHANGES_DISPLAY_URL}|" + commit + ">"
 
     final JSONObject commitMessage = new JSONObject()
     commitMessage.put('title', "Commit Message")
