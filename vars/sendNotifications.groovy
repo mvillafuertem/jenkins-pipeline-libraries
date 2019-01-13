@@ -8,48 +8,36 @@ import net.sf.json.JSONObject
  */
 def call(String buildStatus = 'STARTED', String channel = '#resine') {
 
-    // buildStatus of null means successfull
-    buildStatus = buildStatus ?: 'SUCCESSFUL'
-    channel = channel ?: '#resine'
-
-
     // Default values
-    colorName = 'RED'
-    colorCode = '#FF0000'
     subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}] (<${env.RUN_DISPLAY_URL}|Open>) (<${env.RUN_CHANGES_DISPLAY_URL}|  Changes>)'"
     title = "${env.JOB_NAME} Build: ${env.BUILD_NUMBER}"
     title_link = "${env.RUN_DISPLAY_URL}"
 
-    // Override default values based on build status
     if (buildStatus == 'STARTED') {
-        color = 'YELLOW'
         colorCode = '#FFFF00'
     } else if (buildStatus == 'SUCCESSFUL') {
-        color = 'GREEN'
         colorCode = 'good'
     } else if (buildStatus == 'UNSTABLE') {
-        color = 'YELLOW'
         colorCode = 'warning'
     } else {
-        color = 'RED'
         colorCode = 'danger'
     }
 
-    JSONObject attachment = createAttachment(title, title_link, subject, colorCode)
-    JSONArray attachments = createAttachments(attachment)
+    final JSONObject attachment = createAttachment(title, title_link, subject, colorCode)
+    final JSONArray attachments = createAttachments(attachment)
 
     // Send notifications
     slackSend(color: colorCode, message: subject, attachments: attachments.toString(), channel: channel)
 
 }
 
-private static JSONArray createAttachments(JSONObject attachment) {
+private JSONArray createAttachments(JSONObject attachment) {
     final JSONArray attachments = new JSONArray()
     attachments.add(attachment)
     attachments
 }
 
-private static JSONObject createTestSummary() {
+private JSONObject createTestSummary() {
     // get test results for slack message
     @NonCPS
     def getTestSummary = { ->
@@ -80,7 +68,7 @@ private static JSONObject createTestSummary() {
     testResults
 }
 
-private static JSONObject createCommitMessage() {
+private JSONObject createCommitMessage() {
     def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
     def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
@@ -91,7 +79,7 @@ private static JSONObject createCommitMessage() {
     commitMessage
 }
 
-private static JSONObject createCommitAuthor() {
+private JSONObject createCommitAuthor() {
     def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an'").trim()
     final JSONObject commitAuthor = new JSONObject()
     commitAuthor.put('title', 'Author')
@@ -100,7 +88,7 @@ private static JSONObject createCommitAuthor() {
     commitAuthor
 }
 
-private static JSONObject createBranch() {
+private JSONObject createBranch() {
 
     branchName = "${env.BRANCH_NAME}"
 
@@ -111,7 +99,7 @@ private static JSONObject createBranch() {
     return branch
 }
 
-private static JSONObject createAttachment(GString title, GString title_link, GString subject, java.lang.String colorCode) {
+private JSONObject createAttachment(GString title, GString title_link, GString subject, java.lang.String colorCode) {
 
     final JSONObject attachment = new JSONObject()
     attachment.put('author', "mvillafuerte")
