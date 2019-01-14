@@ -23,8 +23,11 @@ def call(String buildStatus = 'STARTED', String channel = '#jenkins') {
     } else if (buildStatus == 'SUCCESSFUL') {
         subject = ":tada: ${buildStatus} :rocket:"
         colorCode = 'good'
+    } else if (buildStatus == 'ABORTED') {
+        subject = ":warning: ${buildStatus} :bomb:"
+        colorCode = 'warning'
     } else if (buildStatus == 'UNSTABLE') {
-        subject = ":warning: ${buildStatus} :bomb:)"
+        subject = ":warning: ${buildStatus} :bomb:"
         colorCode = 'warning'
     } else {
         subject = ":boom: ${buildStatus} :fire:"
