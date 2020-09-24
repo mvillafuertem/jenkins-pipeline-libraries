@@ -7,8 +7,8 @@
   <a href="https://www.oracle.com/technetwork/java/javase/11all-relnotes-5013287.html">
     <img src="https://img.shields.io/badge/jdk-11.0.8-orange.svg?logo=java&logoColor=white"/>
   </a>
-  <a href="https://github.com/mvillafuertem/scala/actions?query=workflow%3A%22scalaci%22">
-    <img src="https://github.com/mvillafuertem/scala/workflows/scalaci/badge.svg"/>
+  <a href="https://github.com/mvillafuertem/jenkins-shared-libraries-scala/actions?query=workflow%3A%22scalaci%22">
+    <img src="https://github.com/mvillafuertem/jenkins-shared-libraries-scala/workflows/scalaci/badge.svg"/>
   </a>
 </p> 
 
