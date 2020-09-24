@@ -2,6 +2,7 @@ plugins {
     scala
     groovy
     jacoco
+    idea
 }
 
 repositories {
@@ -12,15 +13,6 @@ repositories {
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-}
-
-tasks.withType<Test> {
-    //useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        showStandardStreams = true
-    }
 }
 
 sourceSets {
@@ -46,6 +38,14 @@ sourceSets {
     }
 }
 
+//tasks.compileScala {
+//    dependsOn(tasks.compileGroovy)
+//}
+//
+//tasks.compileTestScala {
+//    dependsOn(tasks.compileTestGroovy)
+//}
+
 dependencies {
     implementation("org.codehaus.groovy:groovy-all:3.0.5")
     implementation("org.scala-lang:scala-library:2.13.3")
@@ -55,7 +55,16 @@ dependencies {
     testImplementation("org.scalatestplus:junit-4-13_2.13:3.2.2.0")
     testImplementation("com.lesfurets:jenkins-pipeline-unit:1.7")
 
-    testRuntimeOnly("org.scala-lang.modules:scala-xml_2.13:1.2.0")
+    //testRuntimeOnly("org.scala-lang.modules:scala-xml_2.13:1.2.0")
+}
+
+tasks.withType<Test> {
+    //useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        //showStandardStreams = true
+    }
 }
 
 tasks.withType<JacocoReport> {
