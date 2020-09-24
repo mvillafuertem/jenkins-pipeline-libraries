@@ -14,14 +14,14 @@
 
 ****
 
-The Project "jenkins-shared-libraries-scala" offers unit test pipelines with scala test.
+The Project "jenkins-shared-library-scala" offers unit test pipelines with scala test.
 
 ****
 
 ## Simple Pipeline
 
 ```groovy
-library 'jenkins-shared-libraries-scala'
+library 'jenkins-shared-library-scala'
 
 pipeline {
     agent any
