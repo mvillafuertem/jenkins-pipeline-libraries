@@ -18,6 +18,34 @@ The Project "jenkins-shared-libraries-scala" offers unit test pipelines with sca
 
 ****
 
+## Simple Pipeline
+
+```groovy
+library 'jenkins-shared-libraries-scala'
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
+            }
+        }
+        stage('SayHello') {
+            steps {
+                sayHello('Pepe')
+            }
+        }
+        stage('AwsWorkflow') {
+            steps {
+                awsWorkflow() // throw CpsCompilationErrorsException: unable to resolve class io.github.io.github.mvillafuertem.aws.AwsWorkflow
+            }
+        }
+    }
+}
+```
+
 ## slackSendNotification
 
 ![doc/slack-notification.png](doc/slack-notification.png)

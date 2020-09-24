@@ -47,6 +47,7 @@ sourceSets {
 //}
 
 dependencies {
+    //implementation("org.jenkins-ci.plugins.workflow:workflow-step-api:2.14@jar")
     implementation("org.codehaus.groovy:groovy-all:3.0.5")
     implementation("org.scala-lang:scala-library:2.13.3")
 

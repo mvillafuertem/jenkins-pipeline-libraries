@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  jenkins:
+    user: root
+    image: "cloudbees/jenkins-enterprise:2.249.1.2"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - /usr/local/bin/docker:/usr/bin/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    driver: bridge
