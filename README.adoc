@@ -1,9 +1,0 @@
-= Jenkins Pipelines Libraries
-include::attributes.adoc[]
-
-
-[horizontal]
-<<#,Slack>> :: Slack Notifier
-
-
-image::screenshot.png[]
