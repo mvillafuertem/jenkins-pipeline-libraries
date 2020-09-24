@@ -1,1 +1,1 @@
-rootProject.name = "jenkins-shared-library-scala"
+rootProject.name = "jenkins-shared-library"
