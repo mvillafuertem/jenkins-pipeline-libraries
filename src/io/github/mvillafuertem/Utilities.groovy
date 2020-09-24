@@ -1,6 +1,6 @@
 package io.github.mvillafuertem
 
-class Utilities implements Serializable {
+final class Utilities implements Serializable {
     def steps
     Utilities(steps) {this.steps = steps}
 

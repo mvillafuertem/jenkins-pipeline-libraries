@@ -3,6 +3,6 @@
  */
 package guidesamples
 
-class Library {
+final class Library {
   def someLibraryMethod(): Boolean = true
 }

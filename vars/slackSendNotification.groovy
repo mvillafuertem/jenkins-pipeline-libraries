@@ -132,3 +132,5 @@ private JSONObject createAttachment(GString title, GString title_link, java.lang
 
     return attachment
 }
+
+return this
