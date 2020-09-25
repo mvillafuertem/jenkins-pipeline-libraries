@@ -27,6 +27,7 @@ sourceSets {
                 setSrcDirs(listOf("src"))
             }
         }
+        //compileClasspath.plus(sourceSets["scala"].output)
     }
     test {
         withConvention(ScalaSourceSet::class) {
@@ -35,6 +36,7 @@ sourceSets {
             }
         }
         resources.srcDir(file("test/resources"))
+        //compileClasspath.plus(sourceSets["scala"].output)
     }
 }
 
